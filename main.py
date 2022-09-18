@@ -7,69 +7,17 @@ def main():
 
     # Define the window layout
     layout = [
-        [sg.Text("OpenCV Demo", size=(20, 1), justification="center")],
-        [sg.Image(filename="", key="-IMAGE-")],
+        [sg.Text("OpenCV Demo", size=(1, 1), justification="center")],
+        [sg.Image(filename="", key="-IMAGE-",size=(4,4))],
         [sg.Radio("None", "Radio", True, size=(5, 1))],
         [
-            sg.Radio("threshold", "Radio", size=(5, 1), key="-THRESH-"),
-            sg.Slider(
-                (0, 255),
-                128,
-                1,
-                orientation="h",
-                size=(20, 15),
-                key="-THRESH SLIDER-",
-            ),
-        ],
-        [
-            sg.Radio("canny", "Radio", size=(5, 1), key="-CANNY-"),
-            sg.Slider(
-                (0, 255),
-                128,
-                1,
-                orientation="h",
-                size=(10, 15),
-                key="-CANNY SLIDER A-",
-            ),
-            sg.Slider(
-                (0, 255),
-                128,
-                1,
-                orientation="h",
-                size=(10, 15),
-                key="-CANNY SLIDER B-",
-            ),
-        ],
-        [
-            sg.Radio("blur", "Radio", size=(5, 1), key="-BLUR-"),
-            sg.Slider(
-                (1, 11),
-                1,
-                1,
-                orientation="h",
-                size=(20, 15),
-                key="-BLUR SLIDER-",
-            ),
-        ],
-        [
-            sg.Radio("hue", "Radio", size=(5, 1), key="-HUE-"),
-            sg.Slider(
-                (0, 225),
-                0,
-                1,
-                orientation="h",
-                size=(20, 15),
-                key="-HUE SLIDER-",
-            ),
-        ],
-         [
             sg.Radio("enhance", "Radio", size=(5, 1), key="-ENHANCE-"),
             sg.Slider(
                 (1, 255),
                 128,
                 1,
                 orientation="h",
-                size=(20, 15),
+                size=(20, 5),
                 key="-ENHANCE SLIDER-",
             ),
         ],
@@ -77,7 +25,7 @@ def main():
     ]
 
     # Create the window and show it without the plot
-    window = sg.Window("OpenCV Integration", layout, location=(200, 200))
+    window = sg.Window("OpenCV Integration", layout, location=(200, 200),size=(600,600))
 
     cap = cv2.VideoCapture(0)
 
@@ -88,22 +36,7 @@ def main():
 
         ret, frame = cap.read()
 
-        if values["-THRESH-"]:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)[:, :, 0]
-            frame = cv2.threshold(
-                frame, values["-THRESH SLIDER-"], 255, cv2.THRESH_BINARY
-            )[1]
-        elif values["-CANNY-"]:
-            frame = cv2.Canny(
-                frame, values["-CANNY SLIDER A-"], values["-CANNY SLIDER B-"]
-            )
-        elif values["-BLUR-"]:
-            frame = cv2.GaussianBlur(frame, (21, 21), values["-BLUR SLIDER-"])
-        elif values["-HUE-"]:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            frame[:, :, 0] += int(values["-HUE SLIDER-"])
-            frame = cv2.cvtColor(frame, cv2.COLOR_HSV2BGR)
-        elif values["-ENHANCE-"]:
+        if values["-ENHANCE-"]:
             enh_val = values["-ENHANCE SLIDER-"] / 40
             clahe = cv2.createCLAHE(clipLimit=enh_val, tileGridSize=(8, 8))
             lab = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
