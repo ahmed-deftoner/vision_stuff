@@ -14,7 +14,6 @@ def main():
 
     # Define the window layout
     layout = [
-        [sg.Text("OpenCV Demo", size=(1, 1), justification="center")],
         [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
@@ -24,14 +23,14 @@ def main():
         ],
         [sg.Radio("None", "Radio", True, size=(5, 1))],
         [
-            sg.Radio("enhance", "Radio", size=(5, 1), key="-ENHANCE-"),
+            sg.Radio("Pixelate", "Radio", size=(5, 1), key="-PIXELATE-"),
             sg.Slider(
-                (8, 256),
-                256,
+                (8, 2048),
+                1024,
                 1,
                 orientation="h",
                 size=(20, 5),
-                key="-ENHANCE SLIDER-",
+                key="-PIXELATE SLIDER-",
             ),
         ],
         [sg.Button("Exit", size=(5, 1))],
@@ -40,17 +39,15 @@ def main():
     # Create the window and show it without the plot
     window = sg.Window("OpenCV Integration", layout, location=(200, 200),size=(600,600))
 
-    #cap = cv2.VideoCapture(0)
     image = NULL
+    original = NULL
     while True:
         event, values = window.read(timeout=20)
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
 
-        #ret, frame = cap.read()
-        loaded = 0
-        if values["-ENHANCE-"]:
-            enh_val = values["-ENHANCE SLIDER-"]
+        if values["-PIXELATE-"]:
+            enh_val = values["-PIXELATE SLIDER-"]
             # Get input size
             height, width = image.shape[:2]
 
@@ -58,7 +55,7 @@ def main():
             w, h = (int(enh_val), int(enh_val))
 
             # Resize input to "pixelated" size
-            temp = cv2.resize(image, (w, h), interpolation=cv2.INTER_LINEAR)
+            temp = cv2.resize(original, (w, h), interpolation=cv2.INTER_LINEAR)
 
             # Initialize output image
             image = cv2.resize(temp, (width, height), interpolation=cv2.INTER_NEAREST)
@@ -71,11 +68,8 @@ def main():
                 bio = io.BytesIO()
                 image.save(bio, format="PNG")
                 window["-IMAGE-"].update(data=bio.getvalue())
-                loaded = 1
-        if loaded == 1:
-            bio = io.BytesIO()
-            image.save(bio, format="PNG")
-            window["-IMAGE-"].update(data=bio.getvalue())
+                original = image
+                original = np.asarray(original)
         image = np.asarray(image)
         imgbytes = cv2.imencode(".png", image)[1].tobytes()
         window["-IMAGE-"].update(data=imgbytes)
