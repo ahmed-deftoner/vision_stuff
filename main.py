@@ -6,6 +6,26 @@ import cv2
 import numpy as np
 from PIL import Image
 
+input = cv2.imread('cloud.png')
+
+# Get input size
+height, width = input.shape[:2]
+
+# Desired "pixelated" size
+w, h = (16, 16)
+
+# Resize input to "pixelated" size
+temp = cv2.resize(input, (w, h), interpolation=cv2.INTER_LINEAR)
+
+# Initialize output image
+output = cv2.resize(temp, (width, height), interpolation=cv2.INTER_NEAREST)
+
+cv2.imshow('Input', input)
+cv2.imshow('Output', output)
+
+cv2.waitKey(0)
+
+"""
 file_types = [("JPEG (*.jpg)", "*.jpg"),
               ("All files (*.*)", "*.*")]
 
@@ -48,13 +68,17 @@ def main():
             break
 
         #ret, frame = cap.read()
+        loaded = 0
         image = NULL
-        if values["-ENHANCE-"] & image != NULL:
+        if values["-ENHANCE-"] and loaded == 1:
             enh_val = values["-ENHANCE SLIDER-"] / 40
             clahe = cv2.createCLAHE(clipLimit=enh_val, tileGridSize=(8, 8))
             lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
             lab[:, :, 0] = clahe.apply(lab[:, :, 0])
             image = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
+            bio = io.BytesIO()
+            image.save(bio, format="PNG")
+            window["-IMAGE-"].update(data=bio.getvalue())
         if event == "Load Image":
             filename = values["-FILE-"]
             if os.path.exists(filename):
@@ -63,9 +87,13 @@ def main():
                 bio = io.BytesIO()
                 image.save(bio, format="PNG")
                 window["-IMAGE-"].update(data=bio.getvalue())
-            #imgbytes = cv2.imencode(".png", frame)[1].tobytes()
-            #window["-IMAGE-"].update(data=imgbytes)
+                loaded = 1
+        if loaded == 1:
+            bio = io.BytesIO()
+            image.save(bio, format="PNG")
+            window["-IMAGE-"].update(data=bio.getvalue())
 
     window.close()
 
 main()
+"""
