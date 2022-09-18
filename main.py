@@ -26,8 +26,8 @@ def main():
         [
             sg.Radio("enhance", "Radio", size=(5, 1), key="-ENHANCE-"),
             sg.Slider(
-                (1, 255),
-                128,
+                (8, 256),
+                256,
                 1,
                 orientation="h",
                 size=(20, 5),
@@ -50,31 +50,18 @@ def main():
         #ret, frame = cap.read()
         loaded = 0
         if values["-ENHANCE-"]:
-            enh_val = values["-ENHANCE SLIDER-"] / 40
-            clahe = cv2.createCLAHE(clipLimit=enh_val, tileGridSize=(8, 8))
-            lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
-            lab[:, :, 0] = clahe.apply(lab[:, :, 0])
-            image = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
-            #input = cv2.imread('cloud.png')
-
+            enh_val = values["-ENHANCE SLIDER-"]
             # Get input size
             height, width = image.shape[:2]
 
             # Desired "pixelated" size
-            w, h = (32, 32)
+            w, h = (int(enh_val), int(enh_val))
 
             # Resize input to "pixelated" size
             temp = cv2.resize(image, (w, h), interpolation=cv2.INTER_LINEAR)
 
             # Initialize output image
             image = cv2.resize(temp, (width, height), interpolation=cv2.INTER_NEAREST)
-            #bio = io.BytesIO()
-            #image.save(bio, format="PNG")
-            #window["-IMAGE-"].update(data=bio.getvalue())
-            #cv2.imshow('Input', input)
-            #cv2.imshow('Output', output)
-            #print("in")
-            #cv2.waitKey(0)
 
         if event == "Load Image":
             filename = values["-FILE-"]
