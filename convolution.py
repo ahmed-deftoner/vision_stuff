@@ -2,6 +2,25 @@ import numpy as np
 from PIL import Image, ImageOps
 import matplotlib.pyplot as plt
 
+# test filters
+sharpen = np.array([
+    [0, -1, 0],
+    [-1, 5, -1],
+    [0, -1, 0]
+])
+
+blur = np.array([
+    [0.0625, 0.125, 0.0625],
+    [0.125,  0.25,  0.125],
+    [0.0625, 0.125, 0.0625]
+])
+
+outline = np.array([
+    [-1, -1, -1],
+    [-1,  8, -1],
+    [-1, -1, -1]
+])
+
 def plot_image(img: np.array):
     plt.figure(figsize=(6, 6))
     plt.imshow(img, cmap='gray')
