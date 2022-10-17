@@ -48,6 +48,16 @@ def print_filter(matrix, n):
             print(matrix[i][j], end = " ")
         print()
 
+def calculate_target_size(img_size: int, kernel_size: int) -> int:
+    num_pixels = 0
+ 
+    for i in range(img_size):
+        added = i + kernel_size
+        if added <= img_size:
+            num_pixels += 1
+            
+    return num_pixels
+
 def main():
     matrix = []
     n = input_filter(matrix)
