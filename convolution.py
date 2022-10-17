@@ -6,6 +6,11 @@ def plot_image(img: np.array):
     plt.figure(figsize=(6, 6))
     plt.imshow(img, cmap='gray');
 
+def plot_two_images(img1: np.array, img2: np.array):
+    _, ax = plt.subplots(1, 2, figsize=(12, 6))
+    ax[0].imshow(img1, cmap='gray')
+    ax[1].imshow(img2, cmap='gray');
+    
 def input_filter(matrix):
     R = int(input("Enter the dimension:"))
     print("Enter the entries rowwise:")
