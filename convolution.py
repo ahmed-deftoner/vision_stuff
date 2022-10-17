@@ -58,6 +58,21 @@ def calculate_target_size(img_size: int, kernel_size: int) -> int:
             
     return num_pixels
 
+def convolve(img: np.array, kernel: np.array) -> np.array:
+    tgt_size = calculate_target_size(
+        img_size=img.shape[0],
+        kernel_size=kernel.shape[0]
+    )
+    k = kernel.shape[0]
+    convolved_img = np.zeros(shape=(tgt_size, tgt_size))
+
+    for i in range(tgt_size):
+        for j in range(tgt_size):
+            mat = img[i:i+k, j:j+k]
+            convolved_img[i, j] = np.sum(np.multiply(mat, kernel))
+            
+    return convolved_img
+
 def main():
     matrix = []
     n = input_filter(matrix)
