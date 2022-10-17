@@ -80,6 +80,11 @@ def main():
     img = Image.open('cloud.png')
     img = ImageOps.grayscale(img)
     img = img.resize(size=(224, 224))
-    plot_image(img=img)
+    
+    img_sharpened = convolve(img=np.array(img), kernel=sharpen)
+    plot_two_images(
+        img1=img, 
+        img2=img_sharpened
+    )
 
 main()
