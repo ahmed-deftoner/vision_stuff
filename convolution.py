@@ -1,3 +1,10 @@
+import numpy as np
+from PIL import Image, ImageOps
+import matplotlib.pyplot as plt
+
+def plot_image(img: np.array):
+    plt.figure(figsize=(6, 6))
+    plt.imshow(img, cmap='gray');
 
 def input_filter(matrix):
     R = int(input("Enter the dimension:"))
