@@ -77,11 +77,11 @@ def main():
     matrix = []
     n = input_filter(matrix)
     print_filter(matrix, n)
-    img = Image.open('cloud.png')
+    img = Image.open('C:\Users\Nadeem Nisar\Pictures')
     img = ImageOps.grayscale(img)
     img = img.resize(size=(224, 224))
     
-    img_sharpened = convolve(img=np.array(img), kernel=sharpen)
+    img_sharpened = convolve(img=np.array(img), kernel=matrix)
     plot_two_images(
         img1=img, 
         img2=img_sharpened
