@@ -47,8 +47,21 @@ def get_ear(landmarks, refer_idxs, frame_width, frame_height):
     return ear, coords_points
  
 def calculate_avg_ear(landmarks, left_eye_idxs, right_eye_idxs, image_w, image_h):
-    ...
-    ...
+    """Calculate Eye aspect ratio"""
+ 
+    left_ear, left_lm_coordinates = get_ear(
+                                      landmarks, 
+                                      left_eye_idxs, 
+                                      image_w, 
+                                      image_h
+                                    )
+    right_ear, right_lm_coordinates = get_ear(
+                                      landmarks, 
+                                      right_eye_idxs, 
+                                      image_w, 
+                                      image_h
+                                    )
+    Avg_EAR = (left_ear + right_ear) / 2.0
     return Avg_EAR, (left_lm_coordinates, right_lm_coordinates)
  
 def get_mediapipe_app(
