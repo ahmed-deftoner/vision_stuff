@@ -98,3 +98,34 @@ def plot_text(image, text, origin,
               ):
     image = cv2.putText(image, text, origin, font, fntScale, color, thickness)
     return image
+
+
+class VideoFrameHandler:
+    def __init__(self):
+        """
+        Initialize the necessary constants, mediapipe app
+        and tracker variables
+        """
+        # Left and right eye chosen landmarks.
+        self.eye_idxs = {
+            "left": [362, 385, 387, 263, 373, 380],
+            "right": [33, 160, 158, 133, 153, 144],
+        }
+ 
+        # Used for coloring landmark points.
+        # Its value depends on the current EAR value.
+        self.RED = (0, 0, 255)  # BGR
+        self.GREEN = (0, 255, 0)  # BGR
+ 
+        # Initializing Mediapipe FaceMesh solution pipeline
+        self.facemesh_model = get_mediapipe_app()
+ 
+        # For tracking counters and sharing states in and out of callbacks.
+        self.state_tracker = {
+            "start_time": time.perf_counter(),
+            "DROWSY_TIME": 0.0,  # Holds time passed with EAR < EAR_THRESH
+            "COLOR": self.GREEN,
+            "play_alarm": False,
+        }
+ 
+        self.EAR_txt_pos = (10, 30)
